@@ -114,3 +114,45 @@ func jogoMoverElemento(jogo *Jogo, x, y, dx, dy int) {
 	jogo.UltimoVisitado = jogo.Mapa[ny][nx]   // guarda o conteúdo atual da nova posição
 	jogo.Mapa[ny][nx] = elemento              // move o elemento
 }
+
+// Move inimigo em direção ao personagem
+func inimigoMover(jogo *Jogo) {
+	for y := range jogo.Mapa {
+		for x := range jogo.Mapa[y] {
+			if jogo.Mapa[y][x] == Inimigo {
+				dx, dy := 0, 0
+
+				if jogo.PosX > x {
+					dx = 1
+				} else if jogo.PosX < x {
+					dx = -1
+				}
+				if jogo.PosY > y {
+					dy = 1
+				} else if jogo.PosY < y {
+					dy = -1
+				}
+
+				nx, ny := x+dx, y+dy
+
+				// Se nova posição for o personagem
+				if nx == jogo.PosX && ny == jogo.PosY {
+					jogo.Vida--
+					if jogo.Vida <= 0 {
+						jogo.StatusMsg = "Game Over!"
+					} else {
+						jogo.StatusMsg = fmt.Sprintf("Você foi atingido! Vida restante: %d", jogo.Vida)
+					}
+					return
+				}
+
+				// Move o inimigo se possível
+				if jogoPodeMoverPara(jogo, nx, ny) {
+					jogoMoverElemento(jogo, x, y, dx, dy)
+				}
+
+				return
+			}
+		}
+	}
+}
