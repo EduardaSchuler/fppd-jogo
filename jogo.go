@@ -3,6 +3,7 @@ package main
 
 import (
 	"bufio"
+	"fmt"
 	"os"
 )
 
@@ -20,6 +21,8 @@ type Jogo struct {
 	PosX, PosY      int          // posição atual do personagem
 	UltimoVisitado  Elemento     // elemento que estava na posição do personagem antes de mover
 	StatusMsg       string       // mensagem para a barra de status
+
+	Vida 			int			 // vida inicial do personagem
 }
 
 // Elementos visuais do jogo
@@ -35,7 +38,12 @@ var (
 func jogoNovo() Jogo {
 	// O ultimo elemento visitado é inicializado como vazio
 	// pois o jogo começa com o personagem em uma posição vazia
-	return Jogo{UltimoVisitado: Vazio}
+	j:= Jogo{
+		UltimoVisitado: Vazio,
+		Vida: 5,
+	}
+	j.StatusMsg = fmt.Sprintf("Você começou o jogo com %d de vida!", j.Vida)
+	return j
 }
 
 // Lê um arquivo texto linha por linha e constrói o mapa do jogo
