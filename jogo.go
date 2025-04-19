@@ -17,12 +17,13 @@ type Elemento struct {
 
 // Jogo contém o estado atual do jogo
 type Jogo struct {
-	Mapa            [][]Elemento // grade 2D representando o mapa
-	PosX, PosY      int          // posição atual do personagem
-	UltimoVisitado  Elemento     // elemento que estava na posição do personagem antes de mover
-	StatusMsg       string       // mensagem para a barra de status
+	Mapa            	 [][]Elemento // grade 2D representando o mapa
+	PosX, PosY           int          // posição atual do personagem
+	UltimoVisitado	 	 Elemento     // elemento que estava na posição do personagem antes de mover
+	StatusMsg    	     string       // mensagem para a barra de status
 
-	Vida 			int			 // vida inicial do personagem
+	Vida 			     int		  // vida inicial do personagem
+	MovimentosPersonagem int		  // contador de movimentos do personagem para limitar os movimentos do inimigo
 }
 
 // Elementos visuais do jogo
@@ -41,6 +42,7 @@ func jogoNovo() Jogo {
 	j:= Jogo{
 		UltimoVisitado: Vazio,
 		Vida: 5,
+		MovimentosPersonagem: 0,
 	}
 	j.StatusMsg = fmt.Sprintf("Você começou o jogo com %d de vida!", j.Vida)
 	return j
@@ -117,41 +119,43 @@ func jogoMoverElemento(jogo *Jogo, x, y, dx, dy int) {
 
 // Move inimigo em direção ao personagem
 func inimigoMover(jogo *Jogo) {
-	for y := range jogo.Mapa {
-		for x := range jogo.Mapa[y] {
-			if jogo.Mapa[y][x] == Inimigo {
-				dx, dy := 0, 0
+	// Só faz o movimento do inimigo a cada 3 movimentos do personagem
+	if jogo.MovimentosPersonagem % 2 == 0 {
+		for y := range jogo.Mapa {
+			for x := range jogo.Mapa[y] {
+				if jogo.Mapa[y][x] == Inimigo {
+					dx, dy := 0, 0
 
-				if jogo.PosX > x {
-					dx = 1
-				} else if jogo.PosX < x {
-					dx = -1
-				}
-				if jogo.PosY > y {
-					dy = 1
-				} else if jogo.PosY < y {
-					dy = -1
-				}
+					if jogo.PosX > x {
+						dx = 1
+					} else if jogo.PosX < x {
+						dx = -1
+					}
+					if jogo.PosY > y {
+						dy = 1
+					} else if jogo.PosY < y {
+						dy = -1
+					}
 
-				nx, ny := x+dx, y+dy
+					nx, ny := x+dx, y+dy
 
-				// Se nova posição for o personagem
-				if nx == jogo.PosX && ny == jogo.PosY {
-					jogo.Vida--
-					if jogo.Vida <= 0 {
-						jogo.StatusMsg = "Game Over!"
-					} else {
-						jogo.StatusMsg = fmt.Sprintf("Você foi atingido! Vida restante: %d", jogo.Vida)
+					// Se nova posição for o personagem
+					if nx == jogo.PosX && ny == jogo.PosY {
+						jogo.Vida--
+						if jogo.Vida <= 0 {
+							jogo.StatusMsg = "Game Over!"
+						} else {
+							jogo.StatusMsg = fmt.Sprintf("Você foi atingido! Vida restante: %d", jogo.Vida)
+						}
+						return
+					}
+
+					// Move o inimigo se possível
+					if jogoPodeMoverPara(jogo, nx, ny) {
+						jogoMoverElemento(jogo, x, y, dx, dy)
 					}
 					return
 				}
-
-				// Move o inimigo se possível
-				if jogoPodeMoverPara(jogo, nx, ny) {
-					jogoMoverElemento(jogo, x, y, dx, dy)
-				}
-
-				return
 			}
 		}
 	}
