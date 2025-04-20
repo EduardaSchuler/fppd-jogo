@@ -24,7 +24,9 @@ type Jogo struct {
 
 	Vida 			     int		  // vida inicial do personagem
 	MovimentosPersonagem int		  // contador de movimentos do personagem para limitar os movimentos do inimigo
-	TemChave			 bool		  // verifica se o personagem pegou a chave 
+	TemChave			 bool		  // verifica se o personagem pegou a chave
+	PortalApareceu 		 bool		  // liberação do portal
+	TimeoutPortal  		 chan bool	  // contagem regressiva para fechamento do portal
 }
 
 // Elementos visuais do jogo
@@ -49,6 +51,7 @@ func jogoNovo() Jogo {
 		Vida: 5,
 		MovimentosPersonagem: 0,
 		TemChave: false,
+		
 	}
 	j.StatusMsg = fmt.Sprintf("Você começou o jogo com %d de vida!", j.Vida)
 	return j

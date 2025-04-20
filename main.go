@@ -1,7 +1,21 @@
 // main.go - Loop principal do jogo
 package main
 
-import "os"
+import (
+	"os"
+	"time"
+)
+
+func iniciarMovimentoInimigos(jogo *Jogo) {
+	go func() {
+		ticker := time.NewTicker(1 * time.Second)
+		defer ticker.Stop()
+		for {
+			<-ticker.C
+			inimigoMover(jogo)
+		}
+	}()
+}
 
 func main() {
 	// Inicializa a interface (termbox)
@@ -31,4 +45,6 @@ func main() {
 		}
 		interfaceDesenharJogo(&jogo)
 	}
+
+	iniciarMovimentoInimigos(&jogo)
 }

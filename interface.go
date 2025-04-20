@@ -77,6 +77,7 @@ func interfaceDesenharJogo(jogo *Jogo) {
 
 	// Força a atualização do terminal
 	interfaceAtualizarTela()
+	
 }
 
 // Limpa a tela do terminal
