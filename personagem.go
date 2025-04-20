@@ -48,6 +48,7 @@ func personagemInteragir(jogo *Jogo) {
 				jogo.TemChave = true
 				jogo.Mapa[y][x] = Vazio // remove chave do mapa
 				jogo.StatusMsg = "Você coletou a chave! Vá até o portal antes que o inimigo o alcance!"
+				go ativarPortal(jogo) // adiciona reação em tempo real do portal
 			case Portal:
 				if jogo.TemChave {
 					jogo.StatusMsg = "Parabéns! Você abriu o portal e conseguiu escapar em segurança! 🎉"

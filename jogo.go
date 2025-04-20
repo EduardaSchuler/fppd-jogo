@@ -5,6 +5,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"time"
 )
 
 // Elemento representa qualquer objeto do mapa (parede, personagem, vegetação, etc)
@@ -174,4 +175,26 @@ func inimigoMover(jogo *Jogo) {
 			}
 		}
 	}
+}
+
+func ativarPortal(jogo *Jogo) {
+	for y := range jogo.Mapa {
+		for x := range jogo.Mapa[y] {
+			if jogo.Mapa[y][x] == Portal {
+				for i := 0; i < 100; i++ {
+					jogo.Mapa[y][x].cor = CorCinzaEscuro // Muda cor do portal temporariamente
+					interfaceDesenharJogo(jogo)
+					sleep()
+					jogo.Mapa[y][x].cor = CorAzul
+					interfaceDesenharJogo(jogo)
+					sleep()
+				}
+			}
+		}
+	}
+}
+
+func sleep() {
+	// Pequeno delay para efeito visual
+	time.Sleep(300 * time.Millisecond)
 }
