@@ -26,8 +26,7 @@ type Jogo struct {
 	Vida 			     int		  // vida inicial do personagem
 	MovimentosPersonagem int		  // contador de movimentos do personagem para limitar os movimentos do inimigo
 	TemChave			 bool		  // verifica se o personagem pegou a chave
-	PortalApareceu 		 bool		  // liberação do portal
-	TimeoutPortal  		 chan bool	  // contagem regressiva para fechamento do portal
+	PortalAtivo			 bool		  // variavel que verifica se o personagem pegou a chave
 }
 
 // Elementos visuais do jogo
@@ -181,13 +180,17 @@ func ativarPortal(jogo *Jogo) {
 	for y := range jogo.Mapa {
 		for x := range jogo.Mapa[y] {
 			if jogo.Mapa[y][x] == Portal {
-				for i := 0; i < 100; i++ {
-					jogo.Mapa[y][x].cor = CorCinzaEscuro // Muda cor do portal temporariamente
+				for jogo.PortalAtivo {
+					jogo.Mapa[y][x].cor = CorCinzaEscuro
 					interfaceDesenharJogo(jogo)
 					sleep()
 					jogo.Mapa[y][x].cor = CorAzul
 					interfaceDesenharJogo(jogo)
 					sleep()
+
+					if !jogo.PortalAtivo {
+						jogo.Mapa[y][x].cor = CorCinzaEscuro
+					}
 				}
 			}
 		}
