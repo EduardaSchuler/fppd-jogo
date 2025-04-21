@@ -21,14 +21,15 @@ func iniciarCronometro(jogo *Jogo, encerrar chan bool) {
 	go func() {
 		timer := time.NewTimer(60 * time.Second)
 		<-timer.C
+		// Atualiza a mensagem de status com a mensagem de "tempo esgotado"
 		if jogo.Vida > 0 {
-			jogo.StatusMsg = "Tempo esgotado! Você não conseguiu escapar!"
+			jogo.StatusMsg = "Tempo esgotado! Você perdeu sua chance de escapar."
 			jogo.Vida = 0
 		}
+		// Envia sinal de encerramento para o canal, mas o jogo continuará rodando
 		encerrar <- true
 	}()
 }
-
 
 func main() {
 	// Inicializa a interface (termbox)
@@ -50,26 +51,27 @@ func main() {
 	// Desenha o estado inicial do jogo
 	interfaceDesenharJogo(&jogo)
 
-	// Canal para encerrar o jogo
+	// Cria o canal de encerramento
 	encerrar := make(chan bool)
-	iniciarCronometro(&jogo, encerrar)
 
+	// Inicia o cronômetro e o movimento dos inimigos
+	iniciarCronometro(&jogo, encerrar)
+	iniciarMovimentoInimigos(&jogo)
 
 	// Loop principal de entrada
 	rodando := true
 	for rodando {
 		select {
-		case <-encerrar:  // Se o canal encerrar for acionado (tempo esgotado)
-			rodando = false  // Definimos rodando como false para sair do loop
+		case <-encerrar:
+			// Se o canal for sinalizado, encerra o jogo, mas só após exibir a mensagem
+			rodando = false
 		default:
+			// Loop de interação com o teclado
 			evento := interfaceLerEventoTeclado()
 			if continuar := personagemExecutarAcao(evento, &jogo); !continuar {
-				rodando = false  // Caso o jogador saia ou o evento de fim de jogo aconteça, rodando também se torna false
+				rodando = false
 			}
 			interfaceDesenharJogo(&jogo)
 		}
 	}
-	
-
-	iniciarMovimentoInimigos(&jogo)
 }
