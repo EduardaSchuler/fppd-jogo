@@ -45,11 +45,15 @@ func personagemInteragir(jogo *Jogo) {
 
 			switch elem {
 			case Chave:
-				jogo.TemChave = true
-				jogo.PortalAtivo = true
-				jogo.Mapa[y][x] = Vazio // remove chave do mapa
-				jogo.StatusMsg = "Você coletou a chave! Vá até o portal antes que o inimigo o alcance!"
-				go ativarPortal(jogo) // adiciona reação em tempo real do portal
+				if jogo.MissaoAdquirida{
+					jogo.TemChave = true
+					jogo.PortalAtivo = true
+					jogo.Mapa[y][x] = Vazio // remove chave do mapa
+					jogo.StatusMsg = "Você coletou a chave! Vá até o portal antes que o inimigo o alcance!"
+					go ativarPortal(jogo) // adiciona reação em tempo real do portal
+				} else {
+					jogo.StatusMsg = "Você encontrou uma chave em meio a vegetação mas não sabe para o que ela serve."
+				}
 			case Portal:
 				if jogo.TemChave {
 					jogo.PortalAtivo = false;
@@ -57,6 +61,13 @@ func personagemInteragir(jogo *Jogo) {
 				} else {
 					jogo.StatusMsg = "Você precisa da chave para abrir o portal!"
 				}
+			case NPC:
+				jogo.MissaoAdquirida = true
+				jogo.StatusMsg = "Olá, jogador!\n" +
+					"Para você escapar é necessário encontrar a chave para liberar o portal!\n" +
+					"O inimigo escondeu a chave em meio à vegetação, mas se você olhar com olhos atentos,\n" +
+					"você conseguirá identificar.\n" +
+					"Boa sorte!"
 			}
 		}
 	}

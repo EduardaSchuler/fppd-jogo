@@ -27,6 +27,7 @@ type Jogo struct {
 	MovimentosPersonagem int		  // contador de movimentos do personagem para limitar os movimentos do inimigo
 	TemChave			 bool		  // verifica se o personagem pegou a chave
 	PortalAtivo			 bool		  // variavel que verifica se o personagem pegou a chave
+	MissaoAdquirida		 bool		  // verifica se o personagem sabe que deve encontrar a chave
 }
 
 // Elementos visuais do jogo
@@ -39,7 +40,7 @@ var (
 
 	NPC		   = Elemento{'⚉', CorCinzaEscuro, CorPadrao, true}
 	Portal	   = Elemento{'✷', CorAzul, CorPadrao, true}
-	Chave	   = Elemento{'⚵', CorAzul, CorPadrao, true}
+	Chave	   = Elemento{'⚵', CorVerde, CorPadrao, true}
 )
 
 // Cria e retorna uma nova instância do jogo
@@ -51,7 +52,8 @@ func jogoNovo() Jogo {
 		Vida: 5,
 		MovimentosPersonagem: 0,
 		TemChave: false,
-		
+		PortalAtivo: false,
+		MissaoAdquirida: false,
 	}
 	j.StatusMsg = fmt.Sprintf("Você começou o jogo com %d de vida!", j.Vida)
 	return j
