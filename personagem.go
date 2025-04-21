@@ -57,17 +57,13 @@ func personagemInteragir(jogo *Jogo) {
 			case Portal:
 				if jogo.TemChave {
 					jogo.PortalAtivo = false;
-					jogo.StatusMsg = "Parabéns! Você abriu o portal e conseguiu escapar em segurança! 🎉"
+					jogo.StatusMsg = "Parabéns! Você abriu o portal e conseguiu escapar em segurança!"
 				} else {
 					jogo.StatusMsg = "Você precisa da chave para abrir o portal!"
 				}
 			case NPC:
 				jogo.MissaoAdquirida = true
-				jogo.StatusMsg = "Olá, jogador!\n" +
-					"Para você escapar é necessário encontrar a chave para liberar o portal!\n" +
-					"O inimigo escondeu a chave em meio à vegetação, mas se você olhar com olhos atentos,\n" +
-					"você conseguirá identificar.\n" +
-					"Boa sorte!"
+				jogo.StatusMsg = "Olá, jogador! Para você escapar é necessário encontrar a chave para liberar o portal! O inimigo escondeu a chave em meio à vegetação, mas se você olhar com olhos atentos, você conseguirá identificar. Boa sorte!"
 			}
 		}
 	}
