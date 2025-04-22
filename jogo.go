@@ -43,7 +43,7 @@ var (
 
 	NPC		   = Elemento{'⚉', CorCinzaEscuro, CorPadrao, true}
 	Portal	   = Elemento{'✷', CorAzul, CorPadrao, true}
-	Chave	   = Elemento{'⚵', CorVerde, CorPadrao, true}
+	Chave	   = Elemento{'⚵', CorAmarela,CorPadrao, true}
 )
 
 // Cria e retorna uma nova instância do jogo
