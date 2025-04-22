@@ -55,8 +55,8 @@ func main() {
 	encerrar := make(chan bool)
 
 	// Inicia o cronômetro e o movimento dos inimigos
-	iniciarCronometro(&jogo, encerrar)
-	iniciarMovimentoInimigos(&jogo)
+	go iniciarCronometro(&jogo, encerrar)
+	go iniciarMovimentoInimigos(&jogo)
 
 	// Loop principal de entrada
 	rodando := true

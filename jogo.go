@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"time"
+	"sync"
 )
 
 // Elemento representa qualquer objeto do mapa (parede, personagem, vegetação, etc)
@@ -28,6 +29,8 @@ type Jogo struct {
 	TemChave			 bool		  // verifica se o personagem pegou a chave
 	PortalAtivo			 bool		  // variavel que verifica se o personagem pegou a chave
 	MissaoAdquirida		 bool		  // verifica se o personagem sabe que deve encontrar a chave
+
+	mu 				 	 sync.RWMutex //Mutex
 }
 
 // Elementos visuais do jogo
@@ -88,11 +91,15 @@ func jogoCarregarMapa(nome string, jogo *Jogo) error {
 			case Vegetacao.simbolo:
 				e = Vegetacao
 			case Personagem.simbolo:
+				jogo.mu.Lock()
 				jogo.PosX, jogo.PosY = x, y // registra a posição inicial do personagem
+				jogo.mu.Unlock()
 			}
 			linhaElems = append(linhaElems, e)
 		}
+		jogo.mu.Lock()
 		jogo.Mapa = append(jogo.Mapa, linhaElems)
+		jogo.mu.Unlock()
 		y++
 	}
 	if err := scanner.Err(); err != nil {
@@ -103,6 +110,9 @@ func jogoCarregarMapa(nome string, jogo *Jogo) error {
 
 // Verifica se o personagem pode se mover para a posição (x, y)
 func jogoPodeMoverPara(jogo *Jogo, x, y int) bool {
+	jogo.mu.Lock()
+	defer jogo.mu.Unlock()
+
 	// Verifica se a coordenada Y está dentro dos limites verticais do mapa
 	if y < 0 || y >= len(jogo.Mapa) {
 		return false
@@ -126,6 +136,9 @@ func jogoPodeMoverPara(jogo *Jogo, x, y int) bool {
 func jogoMoverElemento(jogo *Jogo, x, y, dx, dy int) {
 	nx, ny := x+dx, y+dy
 
+	jogo.mu.Lock()
+	defer jogo.mu.Unlock()
+
 	// Obtem elemento atual na posição
 	elemento := jogo.Mapa[y][x] // guarda o conteúdo atual da posição
 
@@ -136,6 +149,9 @@ func jogoMoverElemento(jogo *Jogo, x, y, dx, dy int) {
 
 // Move inimigo em direção ao personagem
 func inimigoMover(jogo *Jogo) {
+	jogo.mu.Lock()
+	defer jogo.mu.Unlock()
+	
 	// Só faz o movimento do inimigo a cada 3 movimentos do personagem
 	if jogo.MovimentosPersonagem % 2 == 0 {
 		for y := range jogo.Mapa {
@@ -156,7 +172,7 @@ func inimigoMover(jogo *Jogo) {
 
 					nx, ny := x+dx, y+dy
 
-					// Se nova posição for o personagem
+					// Se nova posição for o personagem causa dano
 					if nx == jogo.PosX && ny == jogo.PosY {
 						jogo.Vida--
 						if jogo.Vida <= 0 {
