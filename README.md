@@ -64,19 +64,14 @@ Também é possivel compilar o projeto usando o comando `make` no Linux ou o scr
 
 ## Implementação
 
-*Cor personalizada para a chave*
-A chave que antes usava uma cor padrão agora foi alterada para a cor amarela, tornando sua identificação mais intuitiva para o jogador.
+### *Sistema de interação*
+1. O jogador pode interagir com elementos do mapa pressionando a tecla E, como por exemplo coletar a chave.
+2. O inimigo se move em direção ao personagem a partir do movimento feito pelo jogador.
 
-*Leitura de mapa por arquivo .txt*
-O jogo utiliza um sistema de leitura de mapas a partir de arquivos de texto (mapa.txt e maze.txt), permitindo fácil customização do ambiente do jogo.
-
-*Sistema de interação*
-O jogador pode interagir com elementos do mapa pressionando a tecla E, como por exemplo coletar a chave.
-
-*Detecção de vitória*
+### *Detecção de vitória*
 Quando o jogador coleta a chave e alcança a saída, o jogo exibe uma mensagem de vitória, encerrando a partida.
 
-*Elementos Adicionais*
-'⚉' -> NPC
-'✷' -> Portal
-'⚵' -> Chave
+### *Elementos Adicionais*
+1. ```⚉``` -> NPC
+2. ```✷``` -> Portal
+3. ```⚵``` -> Chave
