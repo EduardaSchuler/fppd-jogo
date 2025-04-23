@@ -43,7 +43,7 @@ var (
 
 	NPC		   = Elemento{'⚉', CorCinzaEscuro, CorPadrao, true}
 	Portal	   = Elemento{'✷', CorAzul, CorPadrao, true}
-	Chave	   = Elemento{'⚵', CorAmarela,CorPadrao, true}
+	Chave	   = Elemento{'⚵', CorVerde ,CorPadrao, true}
 )
 
 // Cria e retorna uma nova instância do jogo
@@ -148,10 +148,7 @@ func jogoMoverElemento(jogo *Jogo, x, y, dx, dy int) {
 }
 
 // Move inimigo em direção ao personagem
-func inimigoMover(jogo *Jogo) {
-	jogo.mu.Lock()
-	defer jogo.mu.Unlock()
-	
+func inimigoMover(jogo *Jogo) {	
 	// Só faz o movimento do inimigo a cada 3 movimentos do personagem
 	if jogo.MovimentosPersonagem % 2 == 0 {
 		for y := range jogo.Mapa {
