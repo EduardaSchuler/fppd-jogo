@@ -57,6 +57,7 @@ func main() {
 	// Inicia o cronômetro e o movimento dos inimigos
 	go iniciarCronometro(&jogo, encerrar)
 	go iniciarMovimentoInimigos(&jogo)
+	go ativarPortal(&jogo)
 
 	// Loop principal de entrada
 	rodando := true

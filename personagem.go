@@ -45,15 +45,17 @@ func personagemInteragir(jogo *Jogo) {
 
 			switch elem {
 			case Chave:
-				if jogo.MissaoAdquirida{
+				if jogo.MissaoAdquirida {
 					jogo.TemChave = true
-					jogo.PortalAtivo = true
-					jogo.Mapa[y][x] = Vazio // remove chave do mapa
+					jogo.Mapa[y][x] = Vazio
 					jogo.StatusMsg = "Você coletou a chave! Vá até o portal antes que o inimigo o alcance!"
-					go ativarPortal(jogo) // adiciona reação em tempo real do portal
+					go func() {
+						jogo.CanalChave <- true // envia mensagem ao portal
+					}()
 				} else {
-					jogo.StatusMsg = "Você encontrou uma chave em meio a vegetação mas não sabe para o que ela serve."
+					jogo.StatusMsg = "Você encontrou uma chave, mas não sabe para que serve."
 				}
+			
 			case Portal:
 				if jogo.TemChave {
 					jogo.PortalAtivo = false;

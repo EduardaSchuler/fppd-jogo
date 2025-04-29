@@ -5,7 +5,6 @@ import (
 	"bufio"
 	"fmt"
 	"os"
-	"time"
 	"sync"
 )
 
@@ -29,6 +28,7 @@ type Jogo struct {
 	TemChave			 bool		  // verifica se o personagem pegou a chave
 	PortalAtivo			 bool		  // variavel que verifica se o personagem pegou a chave
 	MissaoAdquirida		 bool		  // verifica se o personagem sabe que deve encontrar a chave
+	CanalChave 			 chan bool	  // canal de escuta para liberar o portal
 
 	mu 				 	 sync.RWMutex //Mutex
 }
@@ -57,6 +57,7 @@ func jogoNovo() Jogo {
 		TemChave: false,
 		PortalAtivo: false,
 		MissaoAdquirida: false,
+		CanalChave: make(chan bool), 
 	}
 	j.StatusMsg = fmt.Sprintf("Você começou o jogo com %d de vida!", j.Vida)
 	return j
@@ -189,30 +190,4 @@ func inimigoMover(jogo *Jogo) {
 			}
 		}
 	}
-}
-
-func ativarPortal(jogo *Jogo) {
-	for y := range jogo.Mapa {
-		for x := range jogo.Mapa[y] {
-			if jogo.Mapa[y][x] == Portal {
-				for jogo.PortalAtivo {
-					jogo.Mapa[y][x].cor = CorCinzaEscuro
-					interfaceDesenharJogo(jogo)
-					sleep()
-					jogo.Mapa[y][x].cor = CorAzul
-					interfaceDesenharJogo(jogo)
-					sleep()
-
-					if !jogo.PortalAtivo {
-						jogo.Mapa[y][x].cor = CorCinzaEscuro
-					}
-				}
-			}
-		}
-	}
-}
-
-func sleep() {
-	// Pequeno delay para efeito visual
-	time.Sleep(300 * time.Millisecond)
 }
