@@ -6,7 +6,7 @@ import (
 
 func ativarPortal(jogo *Jogo) {
 	select {
-	case <-jogo.CanalChave:
+	case <-jogo.CanalChave: // le lr a mensagem do canal da chave
 		jogo.PortalAtivo = true
 		for y := range jogo.Mapa {
 			for x := range jogo.Mapa[y] {

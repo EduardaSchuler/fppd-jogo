@@ -50,7 +50,7 @@ func personagemInteragir(jogo *Jogo) {
 					jogo.Mapa[y][x] = Vazio
 					jogo.StatusMsg = "Você coletou a chave! Vá até o portal antes que o inimigo o alcance!"
 					go func() {
-						jogo.CanalChave <- true // envia mensagem ao portal
+						jogo.CanalChave <- true // envia mensagem para o canal de chave
 					}()
 				} else {
 					jogo.StatusMsg = "Você encontrou uma chave, mas não sabe para que serve."
